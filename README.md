@@ -24,6 +24,20 @@ sest õpetaja githubi ilma kutseta lisada ei saa, selle asemel peab olmea teie e
 # Tegija tegemised
 
 Siia palun tee loetelu kõikidest asjadest mida sa tegid. Järjekord pole oluline.
-* Tegevus
-* ...
+* ## Tegija tegemised
+
+* Lõin andmebaasi `feedback_db` ja tabeli `feedback` (5 veeruga: id, submitted_at, name, email, message)
+* Lõin kausta `include/` ja sinna failid `settings_example.php` ja `mysqli.php`
+* Kasutasin tunnis õpetatud `Db` klassi ja seadistasin andmebaasi ühenduse
+* Muutsin `submit_feedback.php` nii, et salvestaks andmed nii andmebaasi kui CSV faili
+* Lisasin `require_once` abil ühendusefailid `submit_feedback.php` ja `admin.php` failidesse
+* Kirjutasin ümber SQL päringud, et kasutada `dbQuery()` ja `dbFix()` meetodeid
+* Admin-vaates asendasin CSV lugemise SQL SELECT päringuga
+* Tegin kustutamise loogika ainult andmebaasi jaoks (CSV jääb muutmata)
+* Parandasin kustutamislingi `index.php?page=admin&delete=...` kujule
+* Muutsin suunamised (`header("Location: ...")`) selliseks, et töötavad `index.php` kaudu
+* Kuvan kuupäevi formaadis `dd.mm.yyyy hh:mm` (kasutan `date()` funktsiooni)
+* Kaitsesin `admin.php` ligipääsu parooliga (login.php seadistab cookie `admin_auth`)
+* Lisasin `logout.php`, mis eemaldab õigused ja suunab avalehele
+
 

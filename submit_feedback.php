@@ -1,4 +1,8 @@
 <?php
+require_once("include/settings_example.php");
+require_once("include/mysqli.php");
+$db = new Db();
+
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $name = trim($_POST["name"] ?? '');
     $email = trim($_POST["email"] ?? '');
@@ -6,21 +10,28 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     if ($name && $email && $message) {
         $timestamp = date("Y-m-d H:i:s");
+
         $name = htmlspecialchars($name);
         $email = htmlspecialchars($email);
         $message = str_replace(["\r", "\n", ";"], " ", htmlspecialchars($message));
 
-        $line = "$timestamp;$name;$email;$message\n";
+        $sql = "INSERT INTO feedback (submitted_at, name, email, message) VALUES (" .
+               $db->dbFix($timestamp) . "," .
+               $db->dbFix($name) . "," .
+               $db->dbFix($email) . "," .
+               $db->dbFix($message) . ")";
 
-        file_put_contents("feedback.csv", $line, FILE_APPEND | LOCK_EX);
-
-        echo "<h3>Aitäh! Teie sõnum on salvestatud.</h3>";
-        echo "<a href='index.php'>Avalehele</a>";
+        if ($db->dbQuery($sql)) {
+            file_put_contents("feedback.csv", "$timestamp;$name;$email;$message\n", FILE_APPEND);
+            header("Location: index.php?page=thanks");
+            exit;
+        } else {
+            echo "<p>Viga andmete salvestamisel.</p>";
+        }
     } else {
-        echo "<h3>Palun täida kõik väljad.</h3>";
-		echo "<a href='javascript:history.back()'>Tagasi</a>";
+        echo "<p>Palun täida kõik väljad.</p>";
     }
 } else {
-    header("Location: contact.html");
+    header("Location: index.php?page=contact");
     exit;
 }
